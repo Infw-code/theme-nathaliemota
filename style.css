@@ -237,49 +237,97 @@ header {
   margin-right: -85px;
 }
 
-/* Style des selects */
-.filter-bar select {
-  padding: 8px 230px 8px 10px;
+/* Custom select */
+.custom-select {
+  position: relative;
+  font-family: "Poppins", sans-serif;
+  font-size: 14px;
+  text-transform: uppercase;
+  display: inline-block; /* permet largeur auto */
+}
+
+.custom-select .selected {
+  position: relative;
+  background: #fff;
   border: 1px solid #cecaca;
   border-radius: 6px;
-  font-size: 14px;
-  font-family: "Poppins", sans-serif;
-  text-transform: uppercase;
-  background-color: #fff; /* garder la capsule blanche */
+  padding: 8px 230px 8px 10px; /* reprend ton ancien select */
   cursor: pointer;
 }
 
-/* Texte des options */
-.filter-bar select option {
+/* Flèche ▼ */
+.custom-select .selected::after {
+  content: "▼";
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 12px;
+  color: #666;
+  pointer-events: none;
+  transition: transform 0.2s;
+}
+
+/* Flèche vers le haut quand ouvert */
+.custom-select.open .selected::after {
+  content: "▲";
+}
+
+/* Liste déroulante */
+.custom-select .options {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  margin-top: 4px;
+  list-style: none;
+  padding: 0;
+  z-index: 1000;
+}
+
+.custom-select .options.open {
+  display: block;
+}
+
+.custom-select .options li {
+  padding: 8px;
+  cursor: pointer;
   text-transform: lowercase;
   font-family: "Poppins", sans-serif;
 }
 
-/* Focus sur le select */
-.filter-bar select:focus {
-  border-color: blue;
-  outline: none;
-  box-shadow: 0 0 4px rgba(0, 0, 255, 0.4);
+/* Hover = rose */
+.custom-select .options li:hover {
+  background: #f8c4d8;
+  color: black;
 }
 
-/* Option sélectionnée */
-.filter-bar select option:checked {
-  background-color: red;
+/* Option sélectionnée = rouge */
+.custom-select .options li.selected-option {
+  background: red;
   color: #fff;
 }
 
-/* Hover sur option (fonctionne sur Firefox uniquement) */
-.filter-bar select option:hover {
-  background-color: #f8c4d8; /* rose pâle */
-  color: black;
-}
-.filter-bar select option[disabled] {
+/* Option désactivée */
+.custom-select .options li[data-value=""] {
   color: #999;
-}
-select[name="trier-par"] {
-  margin-right: 220px;
+  pointer-events: none;
 }
 
+/* Focus simulé */
+.custom-select:focus-within .selected {
+  border-color: blue;
+  box-shadow: 0 0 4px rgba(0, 0, 255, 0.4);
+}
+
+/* Ajustement pour "Trier par" */
+.trier-par .custom-select {
+  margin-right: 220px;
+}
 .gallery-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);

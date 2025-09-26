@@ -75,6 +75,63 @@ $hero_image = get_posts($args);
     </div>
   </div>
 </form>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  document.querySelectorAll(".filter-bar select").forEach(function (selectEl) {
+    const wrapper = document.createElement("div");
+    wrapper.className = "custom-select";
+    selectEl.style.display = "none";
+    selectEl.parentNode.insertBefore(wrapper, selectEl);
+    wrapper.appendChild(selectEl);
+
+    const selected = document.createElement("div");
+    selected.className = "selected";
+    selected.textContent =
+      selectEl.options[selectEl.selectedIndex]?.text ||
+      selectEl.options[0]?.text;
+    wrapper.appendChild(selected);
+
+    const optionList = document.createElement("ul");
+    optionList.className = "options";
+    Array.from(selectEl.options).forEach((opt, index) => {
+      const li = document.createElement("li");
+      li.textContent = opt.text;
+      li.dataset.value = opt.value;
+
+      // appliquer la classe rouge si c'est l'option sélectionnée
+      if (opt.selected) {
+        li.classList.add("selected-option");
+      }
+
+      li.addEventListener("click", () => {
+        // reset
+        optionList.querySelectorAll("li").forEach((el) =>
+          el.classList.remove("selected-option")
+        );
+        li.classList.add("selected-option");
+
+        selectEl.value = opt.value;
+        selected.textContent = opt.text;
+        optionList.classList.remove("open");
+        selectEl.dispatchEvent(new Event("change"));
+      });
+
+      optionList.appendChild(li);
+    });
+    wrapper.appendChild(optionList);
+
+    selected.addEventListener("click", () => {
+      optionList.classList.toggle("open");
+    });
+
+    document.addEventListener("click", (e) => {
+      if (!wrapper.contains(e.target)) {
+        optionList.classList.remove("open");
+      }
+    });
+  });
+});
+</script>
 <!-- Galerie -->
 <div class="gallery-grid" id="gallery">
   <?php
