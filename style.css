@@ -251,7 +251,7 @@ header {
   background: #fff;
   border: 1px solid #cecaca;
   border-radius: 6px;
-  padding: 8px 230px 8px 10px; /* reprend ton ancien select */
+  padding: 8px 230px 8px 10px;
   cursor: pointer;
 }
 
@@ -296,20 +296,23 @@ header {
 .custom-select .options li {
   padding: 8px;
   cursor: pointer;
-  text-transform: lowercase;
+  text-transform: capitalize;
+  min-height: 30px;
   font-family: "Poppins", sans-serif;
 }
 
 /* Hover = rose */
 .custom-select .options li:hover {
-  background: #f8c4d8;
+  background: #FFD6D6;
   color: black;
+  border-radius: 5px;
 }
 
 /* Option sélectionnée = rouge */
 .custom-select .options li.selected-option {
   background: red;
   color: #fff;
+  text-transform: capitalize;
 }
 
 /* Option désactivée */
@@ -972,22 +975,32 @@ header {
   }
 
   /* ----- Galerie et filtres ----- */
-  .filter-bar,
+/* Responsive filtres */
+  .filter-bar {
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    padding: 0 10px;
+  }
+
   .filterDouble {
     flex-direction: column;
     align-items: center;
     gap: 10px;
-    padding: 0 10px;
+    padding: 0;
   }
 
   .trier-par {
-    margin-left: -85px;
+    margin-left: 90px;
   }
 
-  .filter-bar select {
-    width: 300px;
+  /* Selects en full largeur */
+  .filter-bar select,
+  .custom-select {
+    width: 100%;
+    max-width: 320px;
     padding: 8px 10px;
-    margin: 0;
+    margin: 0 auto;
   }
 
   select[name="trier-par"] {
@@ -1162,7 +1175,6 @@ header {
   }
 /*lightbox */
 .lightbox-content {
-max-width: 80%;
 justify-content: center;
 box-sizing: border-box;
 }
@@ -1195,6 +1207,23 @@ box-sizing: border-box;
   .modal-content form textarea {
     width: 100%;
   }
+  /*lightbox*/
+  .lightbox-content {
+    max-width: 50%;
+    margin-right: 170px;
+  }
+.prev, .next {
+    margin-top: 260px;
+}
+.next {
+  margin-right: 120px;
+}
+.prev {
+  margin-left: 130px;
+}
+.lightbox-close {
+  margin-right: 20px;
+}
   /* ----- Footer ----- */
   .footer-content {
     flex-direction: column;

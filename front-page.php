@@ -53,14 +53,15 @@ $hero_image = get_posts($args);
       </select>
 
       <!-- Format -->
-      <select name="format">
-        <option value="" disabled selected>FORMATS</option>
+      <select name="format" placeholder="FORMATS">
+        <option value="" selected></option>
         <?php
         $terms = get_terms(['taxonomy' => 'format', 'hide_empty' => false]);
         $current_format = isset($_GET['format']) ? $_GET['format'] : '';
         foreach ($terms as $term) {
           $selected = ($current_format === $term->slug) ? 'selected' : '';
-          echo "<option value='{$term->slug}' {$selected}>{$term->name}</option>";
+          $name = ucfirst($term->name);
+          echo "<option value='{$term->slug}' {$selected}>{$name}</option>";
         }
         ?>
       </select>
