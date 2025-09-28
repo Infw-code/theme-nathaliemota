@@ -40,8 +40,8 @@ $hero_image = get_posts($args);
   <div class="filter-bar">
     <div class="filterDouble">
       <!-- Catégorie -->
-      <select name="categorie">
-        <option value="" disabled selected>CATÉGORIES</option>
+      <select name="categorie" class="categorie">
+        <option value="" selected>CATÉGORIES</option>
         <?php
         $terms = get_terms(['taxonomy' => 'categorie', 'hide_empty' => false]);
         $current_cat = isset($_GET['categorie']) ? $_GET['categorie'] : '';
@@ -53,23 +53,23 @@ $hero_image = get_posts($args);
       </select>
 
       <!-- Format -->
-      <select name="format" placeholder="FORMATS">
-        <option value="" selected></option>
+      <select name="format" class="format">
+        <option value="" selected>FORMATS</option>
         <?php
         $terms = get_terms(['taxonomy' => 'format', 'hide_empty' => false]);
         $current_format = isset($_GET['format']) ? $_GET['format'] : '';
         foreach ($terms as $term) {
           $selected = ($current_format === $term->slug) ? 'selected' : '';
-          $name = ucfirst($term->name);
-          echo "<option value='{$term->slug}' {$selected}>{$name}</option>";
+          echo "<option value='{$term->slug}' {$selected}>{$term->name}</option>";
         }
         ?>
       </select>
     </div>
+
     <!-- Trier par -->
     <div class="trier-par">
-      <select name="trier-par">
-        <option value="" disabled selected>TRIER PAR</option>
+      <select name="trier-par" class="trier-par-select">
+        <option value="" selected>TRIER PAR</option>
         <option value="date_desc" <?php echo (isset($_GET['trier-par']) && $_GET['trier-par'] == 'date_desc') ? 'selected' : ''; ?>>+ RÉCENT</option>
         <option value="date_asc" <?php echo (isset($_GET['trier-par']) && $_GET['trier-par'] == 'date_asc') ? 'selected' : ''; ?>>- RÉCENT</option>
       </select>
@@ -94,7 +94,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
     const optionList = document.createElement("ul");
     optionList.className = "options";
+
     Array.from(selectEl.options).forEach((opt, index) => {
+      // on ignore le placeholder si value vide
+      if (opt.value === "") return;
+
       const li = document.createElement("li");
       li.textContent = opt.text;
       li.dataset.value = opt.value;
@@ -119,6 +123,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
       optionList.appendChild(li);
     });
+
     wrapper.appendChild(optionList);
 
     selected.addEventListener("click", () => {
