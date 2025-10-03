@@ -129,7 +129,6 @@ if (modalFront && openModalFrontBtns.length > 0) {
             })
             .catch(err => { console.error(err); loading=false; });
     }
-
     // charger les premières images
     loadMore(true);
 
@@ -137,4 +136,5 @@ if (modalFront && openModalFrontBtns.length > 0) {
     if (filterForm) filterForm.querySelectorAll("select").forEach(select => {
         select.addEventListener("change", () => loadMore(true));
     });
+    
 });
