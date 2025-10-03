@@ -24,25 +24,53 @@ document.addEventListener("DOMContentLoaded", function() {
         });
     });
 })();
+// ----- MODALE CONTACT (single-photo) -----
+const modalContact = document.getElementById("modal-contact");
+// Tous les boutons qui ouvrent la modale contact
+const openModalContactBtns = document.querySelectorAll(".open-modal-contact, .open-modal-single");
 
+if (modalContact && openModalContactBtns.length > 0) {
+    const closeModalBtn = modalContact.querySelector(".close-button");
 
-    /* ======== MODALE CONTACT ======== */
-    const modal = document.getElementById("modal-contact");
-    const openModalBtns = document.querySelectorAll(".open-modal");
-    if (modal && openModalBtns.length > 0) {
-        const closeModalBtn = modal.querySelector(".close-button");
-        openModalBtns.forEach(btn => {
-            btn.addEventListener("click", (e) => {
-                e.preventDefault();
-                modal.classList.add("active");
-            });
+    openModalContactBtns.forEach(btn => {
+        btn.addEventListener("click", (e) => {
+            e.preventDefault();
+            modalContact.classList.add("active"); // affiche la modale
         });
-        if (closeModalBtn) closeModalBtn.addEventListener("click", () => modal.classList.remove("active"));
-        window.addEventListener("click", (e) => {
-            if (e.target === modal) modal.classList.remove("active");
-        });
+    });
+
+    if (closeModalBtn) {
+        closeModalBtn.addEventListener("click", () => modalContact.classList.remove("active"));
     }
 
+    window.addEventListener("click", (e) => {
+        if (e.target === modalContact) modalContact.classList.remove("active");
+    });
+}
+
+// ----- MODALE FRONT-PAGE (header) -----
+const modalFront = document.getElementById("modal-front");
+// Tous les boutons qui ouvrent la modale front-page
+const openModalFrontBtns = document.querySelectorAll(".open-modal-front");
+
+if (modalFront && openModalFrontBtns.length > 0) {
+    const closeFrontBtn = modalFront.querySelector(".close-button");
+
+    openModalFrontBtns.forEach(btn => {
+        btn.addEventListener("click", (e) => {
+            e.preventDefault();
+            modalFront.classList.add("active"); // affiche la modale
+        });
+    });
+
+    if (closeFrontBtn) {
+        closeFrontBtn.addEventListener("click", () => modalFront.classList.remove("active"));
+    }
+
+    window.addEventListener("click", (e) => {
+        if (e.target === modalFront) modalFront.classList.remove("active");
+    });
+}
     /* ======== GALERIE : FILTRES + LOAD MORE ======== */
     const gallery = document.getElementById("gallery");
     const loadMoreBtn = document.getElementById("loadMore");

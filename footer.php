@@ -12,19 +12,24 @@
   <div class="lightbox-content">
     <button id="close-lightbox" class="lightbox-close">&times;</button>
     <img id="lightbox-image" src="" alt="">
-    
-    <!-- Zone infos : référence à gauche, catégorie à droite -->
+
+    <!-- Zone infos -->
     <div class="lightbox-info">
-      <p class="lightbox-reference"></p>
-      <p class="lightbox-category"></p>
+      <div class="info-left">
+        <p class="lightbox-reference"></p>
+      </div>
+      <div class="info-right">
+        <p class="lightbox-category"></p>
+      </div>
     </div>
 
-    <!-- Boutons navigation -->
-    <button id="prev-photo" class="nav-arrow prev">← Précédent</button>
-    <button id="next-photo" class="nav-arrow next">Suivant →</button>
+    <!-- ✅ Flèches déplacées sous les infos -->
+    <div class="fleche">
+      <button id="prev-photo" class="nav-arrow prev">← Précédent</button>
+      <button id="next-photo" class="nav-arrow next">Suivant →</button>
+    </div>
   </div>
 </div>
-
 <!-- Modale contact -->
 <?php get_template_part('template_parts/modal-contact'); ?>
 

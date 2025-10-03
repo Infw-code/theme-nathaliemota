@@ -1,13 +1,17 @@
 document.addEventListener("DOMContentLoaded", function() {
     const lightbox = document.getElementById("lightbox");
+    const lightboxContent = lightbox?.querySelector(".lightbox-content");
     const lightboxImage = document.getElementById("lightbox-image");
     const closeBtn = document.getElementById("close-lightbox");
     const overlay = document.querySelector(".lightbox-overlay");
     const prevBtn = document.getElementById("prev-photo");
     const nextBtn = document.getElementById("next-photo");
 
+    if (!lightbox || !lightboxContent || !lightboxImage) return;
+
     const refEl = document.createElement("p");
     refEl.className = "lightbox-reference";
+
     const catEl = document.createElement("p");
     catEl.className = "lightbox-category";
 
@@ -15,30 +19,31 @@ document.addEventListener("DOMContentLoaded", function() {
     captionWrapper.className = "lightbox-info";
     captionWrapper.appendChild(refEl);
     captionWrapper.appendChild(catEl);
-    lightbox.querySelector(".lightbox-content").appendChild(captionWrapper);
+    lightboxContent.appendChild(captionWrapper);
 
     let images = [];
     let currentIndex = 0;
 
     function initLightbox() {
         images = [];
-        document.querySelectorAll(".open-lightbox").forEach((btn, index) => {
-            images.push({ src: btn.dataset.image, caption: btn.dataset.caption });
+        const lightboxButtons = document.querySelectorAll(".open-lightbox");
+        if (!lightboxButtons.length) return;
+
+        lightboxButtons.forEach((btn, index) => {
+            images.push({ src: btn.dataset.image, caption: btn.dataset.caption || "" });
             btn.addEventListener("click", (e) => {
                 e.preventDefault();
                 currentIndex = index;
                 showImage(currentIndex);
             });
         });
-        console.log("[Lightbox] Initialisée avec", images.length, "images");
     }
 
     function showImage(index) {
-        if (!lightbox || !lightboxImage) return;
+        if (!images[index]) return;
         lightboxImage.src = images[index].src;
 
-        // Séparer la référence et la catégorie (format attendu "reference | categorie")
-        const [reference, categorie] = images[index].caption.split('|').map(s => s.trim());
+        const [reference, categorie] = (images[index].caption || "").split('|').map(s => s.trim());
         refEl.textContent = reference || '';
         catEl.textContent = categorie || '';
 
@@ -65,9 +70,6 @@ document.addEventListener("DOMContentLoaded", function() {
         if (e.key === "ArrowRight" && nextBtn) nextBtn.click();
     });
 
-    // Initialisation au premier chargement
     initLightbox();
-
-    // ⚡ Réagir quand la galerie est mise à jour par scripts.js
     document.addEventListener("galleryUpdated", initLightbox);
 });

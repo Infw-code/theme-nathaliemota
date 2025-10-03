@@ -95,21 +95,18 @@ document.addEventListener("DOMContentLoaded", function () {
     const optionList = document.createElement("ul");
     optionList.className = "options";
 
-    Array.from(selectEl.options).forEach((opt, index) => {
-      // on ignore le placeholder si value vide
-      if (opt.value === "") return;
+    Array.from(selectEl.options).forEach((opt) => {
+      if (opt.value === "") return; // on ignore le placeholder
 
       const li = document.createElement("li");
       li.textContent = opt.text;
       li.dataset.value = opt.value;
 
-      // appliquer la classe rouge si c'est l'option sélectionnée
       if (opt.selected) {
         li.classList.add("selected-option");
       }
 
       li.addEventListener("click", () => {
-        // reset
         optionList.querySelectorAll("li").forEach((el) =>
           el.classList.remove("selected-option")
         );
@@ -117,6 +114,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         selectEl.value = opt.value;
         selected.textContent = opt.text;
+        wrapper.classList.remove("open");
         optionList.classList.remove("open");
         selectEl.dispatchEvent(new Event("change"));
       });
@@ -126,12 +124,26 @@ document.addEventListener("DOMContentLoaded", function () {
 
     wrapper.appendChild(optionList);
 
-    selected.addEventListener("click", () => {
+    // toggle au clic sur tout le wrapper (texte ou flèche)
+    wrapper.addEventListener("click", (e) => {
+      e.stopPropagation();
+
+      // fermer les autres selects
+      document.querySelectorAll(".custom-select").forEach((s) => {
+        if (s !== wrapper) {
+          s.classList.remove("open");
+          s.querySelector(".options").classList.remove("open");
+        }
+      });
+
+      wrapper.classList.toggle("open");
       optionList.classList.toggle("open");
     });
 
+    // fermer si clic à l'extérieur
     document.addEventListener("click", (e) => {
       if (!wrapper.contains(e.target)) {
+        wrapper.classList.remove("open");
         optionList.classList.remove("open");
       }
     });
@@ -146,7 +158,7 @@ document.addEventListener("DOMContentLoaded", function () {
   $args = [
     'post_type'      => 'photo',
     'posts_per_page' => 8,
-    'orderby'        => 'date', // ⚠️ Plus de rand()
+    'orderby'        => 'date',
     'order'          => 'DESC',
   ];
   $photos = get_posts($args);
@@ -154,31 +166,50 @@ document.addEventListener("DOMContentLoaded", function () {
   foreach ($photos as $photo) {
     $displayed_ids[] = $photo->ID;
     $titre = get_the_title($photo->ID);
+
+    // Récupérer la catégorie principale
     $categories = get_the_terms($photo->ID, 'categorie');
-    $categorie_nom = $categories && !is_wp_error($categories) ? $categories[0]->name : '';
+    $categorie_nom = ($categories && !is_wp_error($categories)) ? $categories[0]->name : '';
+
+    // Récupérer la référence : ACF ou post meta fallback
+    $reference = get_post_meta($photo->ID, 'reference', true);
+    if (!$reference && function_exists('get_field')) {
+        $reference = get_field('reference', $photo->ID);
+    }
+
+    // Construire le caption pour la lightbox
+    $caption_text = ($reference ? $reference : $titre) . ' | ' . $categorie_nom;
 
     echo '<div class="gallery-item">';
+
+    // Image cliquable
     echo '<a href="' . get_permalink($photo->ID) . '" data-id="' . $photo->ID . '">';
     echo get_the_post_thumbnail($photo->ID, 'medium_large');
     echo '</a>';
 
+    // Overlay
     echo '<div class="gallery-overlay">';
+
+    // Icône œil
     echo '<div class="overlay-eye">';
     echo '<a href="' . get_permalink($photo->ID) . '">';
     echo '<img src="' . get_template_directory_uri() . '/images/Group.png" alt="Voir la photo" class="eye-icon-img">';
     echo '</a>';
     echo '</div>';
 
+    // Lightbox
     echo '<div class="overlay-action">';
-    echo '<span class="open-lightbox" data-image="' . esc_url(wp_get_attachment_url(get_post_thumbnail_id($photo->ID))) . '" data-caption="' . esc_attr($titre) . '">';
+    echo '<span class="open-lightbox" data-image="' . esc_url(wp_get_attachment_url(get_post_thumbnail_id($photo->ID))) . '" data-caption="' . esc_attr($caption_text) . '">';
     echo '<img src="' . get_template_directory_uri() . '/images/Icon_fullscreen.png" alt="Voir en plein écran" class="fullscreen-icon">';
     echo '</span>';
     echo '</div>';
 
+    // Texte overlay
     echo '<div class="overlay-text">';
     echo '<span class="photo-title">' . esc_html($titre) . '</span>';
     echo '<span class="photo-cat">' . esc_html($categorie_nom) . '</span>';
     echo '</div>';
+
     echo '</div>'; // .gallery-overlay
     echo '</div>'; // .gallery-item
   }

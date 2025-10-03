@@ -23,7 +23,7 @@
         <ul>
             <li><a href="<?php echo home_url(); ?>#accueil">ACCUEIL</a></li>
             <li><a href="<?php echo home_url(); ?>/a-propos">À PROPOS</a></li>
-            <li><a href="#" class="open-modal menu-contact-link">CONTACT</a></li>
+            <li><a href="#" class="open-modal-contact menu-contact-link">CONTACT</a></li>
         </ul>
     </nav>
 </header>

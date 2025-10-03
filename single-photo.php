@@ -121,41 +121,39 @@ if (!empty($categories)):
 
             // Récupère la référence (ACF) ou le titre si vide
             $reference = get_field('reference');
-            $caption_text = ($reference ? $reference : $titre) . ' - ' . $categorie_nom;
+            $reference_text = $reference ? $reference : $titre;
 
             echo '<div class="gallery-item related-photo-item">';
-
-            // Image principale cliquable vers le post
             echo '<a href="' . get_permalink() . '" data-id="' . get_the_ID() . '">';
             if (has_post_thumbnail()) the_post_thumbnail('medium_large');
             echo '</a>';
 
-            // Overlay spécifique à la single
             echo '<div class="related-overlay">';
 
-            // Petit icône œil pour aller sur le post
+            // Petit icône œil
             echo '<div class="overlay-eye">';
             echo '<a href="' . get_permalink() . '">';
             echo '<img src="' . get_template_directory_uri() . '/images/Group.png" alt="Voir la photo" class="eye-icon-img">';
             echo '</a>';
             echo '</div>';
 
-            // Icône pour lightbox
-            echo '<div class="overlay-action">';
-            echo '<span class="open-lightbox" data-image="' . esc_url($image_url) . '" data-caption="' . esc_attr($caption_text) . '">';
-            echo '<img src="' . get_template_directory_uri() . '/images/Icon_fullscreen.png" alt="Voir en plein écran" class="fullscreen-icon">';
-            echo '</span>';
-            echo '</div>';
+// Icône pour lightbox avec data-caption "reference | category"
+echo '<div class="overlay-action">';
+echo '<span class="open-lightbox" 
+            data-image="' . esc_url($image_url) . '" 
+            data-caption="' . esc_attr($reference_text . ' | ' . $categorie_nom) . '">';
+echo '<img src="' . get_template_directory_uri() . '/images/Icon_fullscreen.png" alt="Voir en plein écran" class="fullscreen-icon">';
+echo '</span>';
+echo '</div>';
 
-            // Texte overlay (titre + catégorie)
+            // Texte overlay (référence + catégorie)
             echo '<div class="overlay-text-single">';
-            echo '<span class="photo-title">' . esc_html($titre) . '</span>';
+            echo '<span class="photo-title">' . esc_html($reference_text) . '</span>';
             echo '<span class="photo-cat">' . esc_html($categorie_nom) . '</span>';
             echo '</div>';
 
             echo '</div>'; // .related-overlay
             echo '</div>'; // .gallery-item
-
         endwhile;
         echo '</div></div>';
     endif;

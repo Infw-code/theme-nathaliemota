@@ -43,7 +43,25 @@ function theme_nm_register_menus()
     );
 }
 add_action('after_setup_theme', 'theme_nm_register_menus');
+function cf7_photo_references_scf() {
+    // Récupère tous les posts 'photo'
+    $photos = get_posts([
+        'post_type' => 'photo',
+        'posts_per_page' => -1,
+        'orderby' => 'date',
+        'order' => 'DESC',
+    ]);
 
+    $options = [];
+    foreach ($photos as $photo) {
+        $ref = scf::get('reference', $photo->ID); // SCF récupère la référence
+        if ($ref) {
+            $options[] = esc_html($ref);
+        }
+    }
+
+    return $options; // tableau d'options
+}
 /* Pour charger + d'images sur la page principale avec filtres */
 function load_more_images() {
     $exclude = isset($_GET['exclude']) ? array_map('intval', explode(',', $_GET['exclude'])) : [];

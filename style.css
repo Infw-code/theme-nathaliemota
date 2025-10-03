@@ -117,7 +117,9 @@ header {
   border-radius: 8px;
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
-
+#reference {
+    text-transform: uppercase;
+  }
 .modal-content form input:focus,
 .modal-content form textarea:focus {
   border-color: #3498db;
@@ -193,14 +195,11 @@ header {
   transform: translate(-50%, -50%);
   color: white;
   width: 90%;
-  /* étend le conteneur pour que le texte ait plus de place */
   max-width: none;
-  /* retire toute limite */
 }
 
 .hero-text h1 {
   font-size: 5rem;
-  /* taille actuelle conservée */
   margin: 0;
   color: transparent;
   -webkit-text-stroke: 2px white;
@@ -208,9 +207,7 @@ header {
   text-align: center;
   font-style: italic;
   white-space: nowrap;
-  /* empêche le retour à la ligne */
   overflow: visible;
-  /* assure que rien n’est coupé */
 }
 
 .hero-text p {
@@ -221,33 +218,35 @@ header {
 /* Filtres */
 .filter-bar {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin: 20px 0;
+  justify-content: space-between; /* aligne filterDouble à gauche, trier-par à droite */
+  align-items: flex-start; 
+  margin: 20px 0 20px 135px; /* top/right/bottom/left */
   gap: 20px;
-  flex-wrap: wrap; /* pour mobile */
-  max-width: 80%;
+  flex-wrap: wrap;
+  width: 100%;                     /* conteneur fluide */
+  max-width: 1440px;              /* limite la largeur sur grand écran */
 }
 
 /* Double select (Catégorie + Format) */
 .filterDouble {
   display: flex;
   gap: 20px;
-  flex: 1; /* prend l'espace disponible */
-  min-width: 200px; /* pour ne pas rétrécir trop */
-  max-width: 350px;
+  flex: 1;                         /* prend l’espace disponible à gauche */
+  max-width: 40%;                  /* garde la taille max souhaitée */
 }
 
 /* Chaque select dans filterDouble */
 .filterDouble .custom-select {
-  flex: 1; /* se partagent l'espace disponible */
-  min-width: 120px; /* largeur minimale */
+  flex: 1 1 50%;  
+  min-width: 20px;
+  width: 100%;
+  box-sizing: border-box;
 }
 
-/* Trier par */
+/* Trier par (à droite) */
 .trier-par {
-  flex: 0 0 auto; /* prend juste la largeur de son contenu */
-  min-width: 150px; /* largeur minimale */
+  flex: 0 0 auto; 
+  min-width: 250px;
 }
 
 /* Custom select */
@@ -256,24 +255,30 @@ header {
   font-family: "Poppins", sans-serif;
   font-size: 14px;
   text-transform: uppercase;
-  display: flex; /* pour aligner texte + flèche */
+  display: flex;
   justify-content: space-between;
   align-items: center;
   background: #fff;
   border: 1px solid #cecaca;
   border-radius: 6px;
-  padding: 8px 12px; /* padding responsive */
+  padding: 8px 12px;
   cursor: pointer;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 /* Flèche ▼ */
 .custom-select .selected::after {
   content: "▼";
   font-size: 12px;
-  padding-left: 50px;
   color: #666;
   pointer-events: none;
   transition: transform 0.2s;
+
+  position: absolute;  
+  right: 12px;          
+  top: 50%;             
+  transform: translateY(-50%);
 }
 
 /* Flèche vers le haut quand ouvert */
@@ -302,7 +307,7 @@ header {
 }
 
 .custom-select .options li {
-  padding: 8px 12px; /* uniforme et responsive */
+  padding: 8px 12px;
   cursor: pointer;
   text-transform: capitalize;
   min-height: 30px;
@@ -320,6 +325,7 @@ header {
 .custom-select .options li.selected-option {
   background: red;
   color: #fff;
+  border-radius: 2px;
   text-transform: capitalize;
 }
 
@@ -902,7 +908,6 @@ header {
 
 /* CSS Responsive Mobile */
 @media screen and (max-width: 768px) {
-
   /* ----- Header / Menu ----- */
   header {
     flex-direction: row;
@@ -924,15 +929,15 @@ header {
     border: none;
     cursor: pointer;
     margin-bottom: 10px;
-    position: relative; /* pour que z-index fonctionne */
-    z-index: 1001;      /* supérieur au menu */
+    position: relative; 
+    z-index: 1001; 
 }
 
 /* Menu caché par défaut */
 .menu-right {
     display: none;
     position: absolute;
-    top: 50px;          /* Ajuste selon la hauteur de ton header */
+    top: 50px;      
     left: 0;
     width: 100%;
     background: #f5f5f5;
@@ -984,22 +989,39 @@ header {
 
   /* ----- Galerie et filtres ----- */
 /* Responsive filtres */
+  #filter-form {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+  }
+
   .filter-bar {
+    display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
     gap: 15px;
-    padding: 0 10px;
+    width: 100%;
+    max-width: 350px;
+    margin: 25px auto 0px;
+    text-align: center;
   }
 
   .filterDouble {
+    display: flex;
     flex-direction: column;
     align-items: center;
     gap: 10px;
-    padding: 0;
+    width: 100%;
+    min-width: 320px;
   }
 
   .trier-par {
-    margin-left: 90px;
+    margin-left: 0;
+    width: 100%;
+    display: flex;
+    max-width: 320px;
+    justify-content: center;
   }
 
   /* Selects en full largeur */
@@ -1018,15 +1040,12 @@ header {
   .gallery-grid {
     display: grid;
     grid-template-columns: 1fr;
-    /* une colonne sur mobile */
     gap: 20px;
-    /* espace entre les images */
   }
 
   .gallery-item {
     width: 100%;
     height: 300px;
-    /* hauteur fixe pour toutes les images */
     overflow: hidden;
     position: relative;
   }
@@ -1035,11 +1054,9 @@ header {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    /* recadrage automatique pour remplir le conteneur */
     display: block;
   }
 
-  /* Overlay pour s’adapter à la nouvelle taille */
   .gallery-overlay {
     position: absolute;
     top: 0;
@@ -1075,10 +1092,8 @@ header {
   .photo-info-wrapper {
     display: flex;
     flex-direction: column;
-    /* empile verticalement */
     align-items: stretch;
     min-height: 0;
-    /* évite les hauteurs imposées */
   }
 
   /* image FIRST */
@@ -1086,21 +1101,16 @@ header {
     order: 0;
     width: 100%;
     margin-bottom: 12px;
-    /* espacement entre image et texte */
     float: none;
     clear: both;
     max-width: 100%;
-    /* pas de restriction */
   }
 
   .photo-image img {
     display: block;
     width: 100%;
-    /* prend toute la largeur */
     height: auto;
-    /* garde les proportions */
     object-fit: cover;
-    /* recadre si besoin (utile si tu fixes une hauteur) */
   }
 
   .photo-info-left {
@@ -1125,7 +1135,7 @@ header {
 
   .separator {
     margin-left: -50px;
-    width: 200%;
+    width: 130%;
     height: 2px;
   }
 
@@ -1135,7 +1145,7 @@ header {
 
   .separator2 {
     margin-left: -50px;
-    width: 200%;
+    width: 130%;
     height: 2px;
   }
 
@@ -1168,9 +1178,7 @@ header {
     display: flex;
     flex-direction: column;
     gap: 20px;
-    /* espace entre les images */
     align-items: center;
-    /* centre les images */
   }
 
   .related-photos-grid img {
@@ -1181,57 +1189,73 @@ header {
     top: -70px;
     left: 160px;
   }
-/*lightbox */
-.lightbox-content {
-justify-content: center;
-box-sizing: border-box;
-}
-.lightbox-close {
-  margin-top: -40px;
-}
-.related-overlay {
-  height: 93%;
-  width: 98%;
-}
-.related-photos-grid{
-  margin-left: 8px;
-}
   /* ----- Modale ----- */
-  .modal-content {
-    max-width: 50%;
-    padding: 1rem;
-    margin-right: 220px;
-    margin-top: -250px;
-  }
-.modal-content h1 {
-  margin-top: 1px;
-  margin-bottom: -25px;
-  margin-left: -120px;
+.modal-contact {
+  display: none; 
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.6);
+  display: flex;
+  justify-content: center; 
+  align-items: center;     
+  z-index: 9999;
+}
+
+.modal-contact.active {
+  display: flex;
+}
+.divmodale {
+  margin-bottom: -20px;
+}
+.modal-contact .modal-content {
+  background: #fff;
+  padding: 1rem;
+  max-width: 80%;  
+  width: 90%;     
+  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+  box-sizing: border-box;
+}
+
+.modal-contact .modal-content h1 {
+  margin: -35px 0 -0px -60px;
   font-size: 60px;
   font-style: italic;
   font-weight: 400;
 }
-  .modal-content form input,
-  .modal-content form textarea {
-    width: 100%;
+
+.modal-contact .modal-content form input,
+.modal-contact .modal-content form textarea {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+ /* --- Lightbox --- */
+.lightbox-content {
+    max-width: 85%;
   }
-  /*lightbox*/
-  .lightbox-content {
-    max-width: 50%;
-    margin-right: 170px;
+
+  .lightbox-close {
+    position: absolute;
+    top: -40px;
+    right: 10px;
+    margin: 0;
   }
-.prev, .next {
-    margin-top: 260px;
-}
-.next {
-  margin-right: 120px;
-}
-.prev {
-  margin-left: 130px;
-}
-.lightbox-close {
-  margin-right: 20px;
-}
+  .nav-arrow {
+    position: static !important;
+    transform: none !important;
+    font-size: 1.2rem;
+    color: white;
+    background: #333;
+    border-radius: 5px;
+  }
+  .fleche {
+    display: flex !important;
+    justify-content: space-between !important;
+    gap: 15px;
+  }
   /* ----- Footer ----- */
   .footer-content {
     flex-direction: column;
