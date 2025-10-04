@@ -286,7 +286,10 @@ header {
 .custom-select.open .selected::after {
   transform: translateY(-50%) rotate(-180deg); /* flèche ouverte, demi-tour gauche */
 }
-
+.options li[data-value=" "] {
+  background: none !important; /* garde la couleur normale */
+  cursor: default; /* optionnel, pour montrer que ce n'est pas cliquable */
+}
 /* Liste déroulante */
 .custom-select .options {
   display: none;
@@ -302,7 +305,6 @@ header {
   padding: 0;
   z-index: 1000;
 }
-
 .custom-select .options.open {
   display: block;
 }

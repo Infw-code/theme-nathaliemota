@@ -40,8 +40,9 @@ $hero_image = get_posts($args);
   <div class="filter-bar">
     <div class="filterDouble">
       <!-- Catégorie -->
-      <select name="categorie" class="categorie">
-        <option value="" selected>CATÉGORIES</option>
+      <select name="categorie" class="categorie" placeholder="Catégorie">
+        <option value="" disabled selected>catégorie</option>
+        <option value=" "></option>
         <?php
         $terms = get_terms(['taxonomy' => 'categorie', 'hide_empty' => false]);
         $current_cat = isset($_GET['categorie']) ? $_GET['categorie'] : '';
@@ -53,32 +54,35 @@ $hero_image = get_posts($args);
       </select>
 
       <!-- Format -->
-      <select name="format" class="format">
-        <option value="" selected>FORMATS</option>
-        <?php
-        $terms = get_terms(['taxonomy' => 'format', 'hide_empty' => false]);
-        $current_format = isset($_GET['format']) ? $_GET['format'] : '';
-        foreach ($terms as $term) {
-          $selected = ($current_format === $term->slug) ? 'selected' : '';
-          echo "<option value='{$term->slug}' {$selected}>{$term->name}</option>";
-        }
-        ?>
-      </select>
+<select name="format" class="format" placeholder="FORMATS">
+  <option value="" disabled selected>FORMATS</option>
+  <option value=" "></option>
+  <?php
+  $terms = get_terms(['taxonomy' => 'format', 'hide_empty' => false]);
+  $current_format = isset($_GET['format']) ? $_GET['format'] : '';
+  foreach ($terms as $term) {
+    $selected = ($current_format === $term->slug) ? 'selected' : '';
+    echo "<option value='{$term->slug}' {$selected}>{$term->name}</option>";
+  }
+  ?>
+</select>
     </div>
 
     <!-- Trier par -->
     <div class="trier-par">
       <select name="trier-par" class="trier-par-select">
-        <option value="" selected>TRIER PAR</option>
+        <option value="" disabled selected>TRIER PAR</option>
+        <option value=" "></option>
         <option value="date_desc" <?php echo (isset($_GET['trier-par']) && $_GET['trier-par'] == 'date_desc') ? 'selected' : ''; ?>>+ RÉCENT</option>
         <option value="date_asc" <?php echo (isset($_GET['trier-par']) && $_GET['trier-par'] == 'date_asc') ? 'selected' : ''; ?>>- RÉCENT</option>
       </select>
     </div>
   </div>
 </form>
+ 
 <script>
-document.addEventListener("DOMContentLoaded", function () {
-  document.querySelectorAll(".filter-bar select").forEach(function (selectEl) {
+document.addEventListener("DOMContentLoaded", function() {
+  document.querySelectorAll(".filter-bar select").forEach(function(selectEl) {
     const wrapper = document.createElement("div");
     wrapper.className = "custom-select";
     selectEl.style.display = "none";
@@ -113,7 +117,15 @@ document.addEventListener("DOMContentLoaded", function () {
         li.classList.add("selected-option");
 
         selectEl.value = opt.value;
-        selected.textContent = opt.text;
+
+        // --- CORRECTION ICI ---
+        if (!opt.value.trim()) {
+          selected.textContent = selectEl.getAttribute("placeholder") || selectEl.options[0].text;
+        } else {
+          selected.textContent = opt.text;
+        }
+        // ----------------------
+
         wrapper.classList.remove("open");
         optionList.classList.remove("open");
         selectEl.dispatchEvent(new Event("change"));
@@ -174,7 +186,7 @@ document.addEventListener("DOMContentLoaded", function () {
     // Récupérer la référence : ACF ou post meta fallback
     $reference = get_post_meta($photo->ID, 'reference', true);
     if (!$reference && function_exists('get_field')) {
-        $reference = get_field('reference', $photo->ID);
+      $reference = get_field('reference', $photo->ID);
     }
 
     // Construire le caption pour la lightbox
